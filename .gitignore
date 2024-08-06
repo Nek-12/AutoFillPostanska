@@ -35,6 +35,5 @@ $RECYCLE.BIN/
 .#*
 .cache/
 
-files/priliv_sample_filled.pdf
-files/signature.png
-files/signature.pdf
+/**/signature.png
+/**/signature.pdf
