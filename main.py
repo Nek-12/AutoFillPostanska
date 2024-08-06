@@ -1,14 +1,15 @@
 
-from util import *
+import os
+from pathlib import Path
+import sys
+from util import extract_pdf_fields, fill_pdf_form, format_date, extract_invoice_number, create_temp_signature_pdf, stamp_pdf
 from datetime import datetime
 
 
 # FILL THESE IN
 city = "Novi Sad"
-pdf_path = './files/priliv_sample.pdf'
-output_path = './files/priliv_sample_filled.pdf'
 payment_code_value = '302'
-signature_path = "./files/signature.png"
+signature_path = "./signature.png"
 payment_purpose_value = 'Uplata za usluge izrade računarskih programa'
 invoice_regex = r'EINV(\d+)'
 
@@ -21,18 +22,38 @@ payment_amount_field = 'Text61'
 invoice_number_field = 'Text12'
 current_date_field = 'Text5'
 total_sum_field = 'Text76'
+incoming_sum_field = 'Iznos'
+gross_incoming_sum_field = 'InicijalniIznos'
+payment_id_field = 'Svrha'
 
-input_fields = extract_pdf_fields(pdf_path)
-incoming_sum = input_fields['Iznos']
-gross_incoming_sum = input_fields['InicijalniIznos']
-payment_id_value = input_fields['Svrha']
+# ---------------------------
+
+signature_pdf_path = './signature.pdf'
+
+if len(sys.argv) < 2:
+    input_path = input("Please enter the path to the input PDF file: ").strip().removeprefix('\'').removesuffix('\'')
+else:
+    input_path = sys.argv[1]
+
+if not os.path.exists(input_path):
+    print(
+        f"Please drag the file into the terminal window or use an argument with the correct file path, you entered: {input_path}"
+    )
+    sys.exit(1)
+
+input_fields = extract_pdf_fields(input_path)
+incoming_sum = input_fields[incoming_sum_field]
+gross_incoming_sum = input_fields[gross_incoming_sum_field]
+payment_id_value = input_fields[payment_id_field]
 
 # for (name, value) in input_fields.items():
-    # print(f'{name}: {value}')
+#   print(f'{name}: {value}')
 
 current_date = datetime.now()
 current_date_value = format_date(current_date)
 invoice_number = extract_invoice_number(invoice_regex, payment_id_value)
+output_path = Path(input_path).parent / \
+    f"Devizni Priliv {current_date_value}.pdf"
 
 output_fields = {
     outgoing_code_field: payment_code_value,
@@ -44,12 +65,16 @@ output_fields = {
     total_sum_field: incoming_sum
 }
 
-fill_pdf_form(pdf_path, output_path, output_fields, signature_path)
+fill_pdf_form(input_path, str(output_path.absolute()), output_fields)
 
 print(f"Filled out forms, signing...")
 
-signature_path = create_temp_signature_pdf(signature_path, './files/signature.pdf')
+signature_path = create_temp_signature_pdf(signature_path, signature_pdf_path)
 
-stamp_pdf(output_path, signature_path, output_path)
+stamp_pdf(str(output_path), signature_path, str(output_path))
+
+print("Cleaning up")
+
+os.remove(signature_pdf_path)
 
 print(f"Successfully signed and saved to {output_path}")
