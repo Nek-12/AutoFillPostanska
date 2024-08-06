@@ -1,0 +1,40 @@
+# Python virtual environment
+venv/
+
+# Compiled Python files
+*.pyc
+
+# Python cache
+__pycache__/
+
+# Environment variables
+.env
+
+# IDE files
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Dependency directories
+.venv/
+node_modules/
+
+
+# Windows junk files
+Thumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# macOS junk files
+.DS_Store
+.AppleDouble
+.LSOverride
+# Linux junk files
+*~
+.#*
+.cache/
+
+files/priliv_sample_filled.pdf
+files/signature.png
+files/signature.pdf
