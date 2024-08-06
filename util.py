@@ -37,7 +37,7 @@ def extract_invoice_number(regex: str, transaction_id: str):
     else:
         invoice_number = input(
             "Invoice number not found in the transaction ID. Modify the 'invoice_regex' to fix. Please enter the invoice number: "
-            )
+        )
         return invoice_number
 
 
@@ -67,7 +67,7 @@ def create_temp_signature_pdf(signature_path: str, output_path: str):
 def stamp_pdf(
     content_pdf: Union[Path, str],
     stamp_pdf: Union[Path, str],
-    pdf_result: Union[Path, str],
+    output_path: Union[Path, str],
     signature_fraction: float = 0.15,
     signature_offset_x: float = 0.15,
     signature_offset_y: float = 0.05,
@@ -100,4 +100,4 @@ def stamp_pdf(
             )
         )
 
-    writer.write(pdf_result)
+    writer.write(output_path)

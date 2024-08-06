@@ -10,6 +10,7 @@ from datetime import datetime
 payment_code_value = '302'
 signature_path = "./signature.png"
 invoice_regex = r'EINV(\d+)'
+signature_scale_fraction = 0.15  # relative to the page size (A4)
 
 # Constants, modify if the script does not work. Take the output from the
 #  print when a pdf is opened.
@@ -30,14 +31,16 @@ city_field = 'MestoKorisnika'
 signature_pdf_path = './signature.pdf'
 
 if len(sys.argv) < 2:
-    input_path = input("Please enter the path to the input PDF file: ").strip().removeprefix('\'').removesuffix('\'')
+    input_path = input("Please enter the path to the input PDF file: ") \
+        .strip() \
+        .removeprefix('\'') \
+        .removesuffix('\'')
 else:
     input_path = sys.argv[1]
 
 if not os.path.exists(input_path):
-    print(
-        f"Please drag the file into the terminal window or use an argument with the correct file path, you entered: {input_path}"
-    )
+    print(f"Please drag the file into the terminal window or use an argument with the correct file path, you entered: {
+          input_path}")
     sys.exit(1)
 
 input_fields = extract_pdf_fields(input_path)
@@ -71,7 +74,12 @@ print(f"Filled out forms, signing...")
 
 signature_path = create_temp_signature_pdf(signature_path, signature_pdf_path)
 
-stamp_pdf(str(output_path), signature_path, str(output_path))
+stamp_pdf(
+    content_pdf=(output_path),
+    stamp_pdf=signature_path,
+    output_path=str(output_path),
+    signature_fraction=signature_scale_fraction
+)
 
 print("Cleaning up")
 
