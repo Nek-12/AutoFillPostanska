@@ -1,4 +1,4 @@
-# A script to automatically fill inquiries from Postal Savings Bank (Serbia) and product a PDF that is ready to send back via email. 
+# A script to automatically fill income inquiries from Postal Savings Bank (Serbia)
 
 These inquiries come every time a transfer arrives to your account from abroad. 
 Filling them out each time is tedious and annoying, hence the nature of this script.
