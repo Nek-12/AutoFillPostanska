@@ -75,7 +75,7 @@ print(f"Filled out forms, signing...")
 signature_path = create_temp_signature_pdf(signature_path, signature_pdf_path)
 
 stamp_pdf(
-    content_pdf=(output_path),
+    content_pdf=str(output_path),
     stamp_pdf=signature_path,
     output_path=str(output_path),
     signature_fraction=signature_scale_fraction
